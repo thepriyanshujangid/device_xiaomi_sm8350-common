@@ -1,6 +1,6 @@
 #
 # SPDX-FileCopyrightText: The LineageOS Project
-# SPDX-FileCopyrightText: Yet Another AOSP Project
+# SPDX-FileCopyrightText: Evolution-X
 # SPDX-License-Identifier: Apache-2.0
 #
 
@@ -297,6 +297,15 @@ PRODUCT_COPY_FILES += \
 # Kernel
 PRODUCT_ENABLE_UFFD_GC := true
 
+# Lineage Health
+PRODUCT_PACKAGES += \
+    vendor.lineage.health-service.default
+
+$(call soong_config_set,lineage_health,charging_control_charging_disabled,1)
+$(call soong_config_set,lineage_health,charging_control_charging_enabled,0)
+$(call soong_config_set,lineage_health,charging_control_charging_path,/sys/class/qcom-battery/input_suspend)
+$(call soong_config_set,lineage_health,charging_control_supports_bypass,false)
+
 # Media
 PRODUCT_COPY_FILES += \
     $(LOCAL_PATH)/media/init.qti.media.sh:$(TARGET_COPY_OUT_VENDOR)/bin/init.qti.media.sh \
@@ -392,8 +401,6 @@ PRODUCT_COPY_FILES += \
     $(LOCAL_PATH)/configs/sysconfig_features.xml:$(TARGET_COPY_OUT_PRODUCT)/etc/sysconfig/sysconfig_features.xml
 
 # Power
-TARGET_PROVIDES_POWERHAL := true
-
 PRODUCT_PACKAGES += \
     android.hardware.power-service.lineage-libperfmgr \
     libqti-perfd-client
@@ -467,10 +474,20 @@ PRODUCT_SOONG_NAMESPACES += \
 
 # Telephony
 PRODUCT_PACKAGES += \
-    qcrilNrDb_vendor \
+    ims-ext-common \
+    ims_ext_common.xml \
+    qti-telephony-hidl-wrapper \
+    qti_telephony_hidl_wrapper.xml \
+    qti-telephony-utils \
+    qti_telephony_utils.xml \
+    telephony-ext \
     xiaomi-telephony-stub
 
+PRODUCT_PACKAGES += \
+    qcrilNrDb_vendor
+
 PRODUCT_BOOT_JARS += \
+    telephony-ext \
     xiaomi-telephony-stub
 
 PRODUCT_COPY_FILES += \
